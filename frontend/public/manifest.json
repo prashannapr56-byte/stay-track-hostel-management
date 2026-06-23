@@ -1,0 +1,18 @@
+{
+  "name": "StayTrack - Hostel Management",
+  "short_name": "StayTrack",
+  "description": "Modern hostel management system for administrators and students",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

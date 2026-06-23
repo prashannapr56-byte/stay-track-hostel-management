@@ -1,0 +1,19 @@
+================================================================================
+  COPY THIS PROJECT TO A PEN DRIVE (USB)
+================================================================================
+
+EASIEST: copy ONE of these from this folder:
+
+  1)  HostelManagement-StayTrack-USB-PACKAGE.zip   (~single file, unzip on other PC)
+
+  OR
+
+  2)  Folder:  HostelManagement-StayTrack-USB-PACKAGE\
+      (copy the whole folder — same contents as the zip)
+
+Inside you will find README.txt with setup steps (Node.js + npm install).
+
+The full project with node_modules is NOT included (too large). Run npm install
+in "backend" and "frontend" on each computer.
+
+================================================================================

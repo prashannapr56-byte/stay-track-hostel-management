@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  @apply bg-slate-100 text-slate-900 antialiased;
+}
+
+.auth-backdrop {
+  background:
+    linear-gradient(120deg, rgba(15, 118, 110, 0.85), rgba(17, 94, 89, 0.75)),
+    url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=60');
+  background-size: cover;
+  background-position: center;
+}
