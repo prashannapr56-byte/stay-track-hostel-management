@@ -4,7 +4,13 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const dataDir = path.join(__dirname, '..', 'data')
+
+// On Vercel, the filesystem is read-only except /tmp
+// Detect Vercel environment and use /tmp for the database
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV != null
+const dataDir = isVercel
+  ? '/tmp/staytrack'
+  : (process.env.DATA_DIR || path.join(__dirname, '..', 'data'))
 const dbPath = process.env.SQLITE_PATH || path.join(dataDir, 'staytrack.db')
 
 const SQL = await initSqlJs()

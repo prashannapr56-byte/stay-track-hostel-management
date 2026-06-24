@@ -1,24 +1,20 @@
 const base = () => {
-  // On production/mobile, use explicit API URL; otherwise use relative path
+  // If an explicit backend URL is set (e.g. for separate backend hosting), use it
   if (import.meta.env.VITE_API_BASE) {
     return import.meta.env.VITE_API_BASE + '/api'
   }
-  
+
+  // In production on Vercel, experimentalServices serves backend at /api
+  if (import.meta.env.PROD) {
+    return '/api'
+  }
+
   // For development: if accessed from network IP, construct API URL
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    // Always use HTTPS if available (ngrok, production)
     const protocol = window.location.protocol.includes('https') || window.location.hostname.includes('ngrok') ? 'https' : 'http'
     return `${protocol}://${window.location.hostname}:8080/api`
   }
-  
-  // For localhost development
-  if (typeof window !== 'undefined') {
-    // If using ngrok, use HTTPS
-    if (window.location.protocol === 'https:') {
-      return `https://${window.location.hostname}:8080/api`
-    }
-  }
-  
+
   return '/api'
 }
 

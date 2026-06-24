@@ -1,8 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { db } from './db.js'
 import { runSeed } from './seed.js'
 import authRoutes from './routes/auth.js'
@@ -10,12 +8,9 @@ import adminRoutes from './routes/admin.js'
 import studentRoutes from './routes/student.js'
 import parentRoutes from './routes/parent.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
 runSeed()
 
 const app = express()
-const PORT = Number(process.env.PORT) || 8080
 
 // ====== SECURITY HEADERS MIDDLEWARE ======
 // This makes your app secure like YouTube, Instagram
@@ -44,20 +39,14 @@ app.use((req, res, next) => {
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow localhost, 127.0.0.1, development ports, and ngrok domains
-      if (!origin || 
-          origin.includes('localhost') || 
-          origin.includes('127.0.0.1') || 
-          origin.includes('5173') ||
-          origin.includes('5174') ||
-          origin.includes('8080') ||
-          origin.includes('ngrok') || 
-          origin.includes('.ngrok.app') ||
-          origin.includes('.ngrok.io')) {
-        callback(null, true)
-      } else {
-        callback(null, true) // Allow all for development
-      }
+      // Allow localhost, development ports, ngrok, and all Vercel domains
+      const allowed = !origin ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('ngrok') ||
+        origin.includes('.vercel.app') ||
+        (process.env.ALLOWED_ORIGIN && origin === process.env.ALLOWED_ORIGIN)
+      callback(null, allowed)
     },
     credentials: true,
   }),
@@ -82,22 +71,9 @@ app.use('/api/admin', adminRoutes)
 app.use('/api/student', studentRoutes)
 app.use('/api/parent', parentRoutes)
 
-// Serve static frontend files (if built)
-const frontendDistPath = path.join(__dirname, '../../frontend/dist')
-app.use(express.static(frontendDistPath))
-
-// Fallback to index.html for SPA routing
-app.get('*', (req, res) => {
-  // Don't redirect API requests
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ message: 'API endpoint not found' })
-  }
-  // Serve index.html for all other routes (SPA)
-  res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
-    if (err) {
-      res.status(500).json({ message: 'Error serving application' })
-    }
-  })
+// 404 handler for unknown API routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'API endpoint not found' })
 })
 
 // Error handling middleware
