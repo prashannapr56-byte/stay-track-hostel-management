@@ -39,12 +39,13 @@ app.use((req, res, next) => {
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow localhost, development ports, ngrok, and all Vercel domains
+      // Allow localhost, development ports, ngrok, Vercel, and Render domains
       const allowed = !origin ||
         origin.includes('localhost') ||
         origin.includes('127.0.0.1') ||
         origin.includes('ngrok') ||
         origin.includes('.vercel.app') ||
+        origin.includes('.onrender.com') ||
         (process.env.ALLOWED_ORIGIN && origin === process.env.ALLOWED_ORIGIN)
       callback(null, allowed)
     },
